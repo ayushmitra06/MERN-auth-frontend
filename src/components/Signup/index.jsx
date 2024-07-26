@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './styles.module.css';
 import { Link , useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
     const [data, setData] = useState({
@@ -13,6 +14,11 @@ const Signup = () => {
 
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
+	const togglePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	}
 
     const handleChange = ({currentTarget: input}) => {
         setData({...data, [input.name]: input.value})
@@ -71,6 +77,7 @@ const Signup = () => {
                         className={styles.input}
                         placeholder='Email' 
                         type="email" />
+
                         <input
                         name='password'
                         onChange={handleChange}
@@ -78,7 +85,14 @@ const Signup = () => {
                         required
                         className={styles.input}
                         placeholder='Password' 
-                        type="password" />
+                        type={showPassword ? "text" : "password"} />
+                        
+                        <button 
+						type="button" 
+						className={styles.eye_btn}
+						onClick={togglePasswordVisibility}
+						>{showPassword ? <FaEyeSlash/> : <FaEye/>}
+						</button>
                         {error && <p className={styles.error_msg}>{error}</p>}
                         <button type='submit' className={styles.green_btn}>
                             Sign Up

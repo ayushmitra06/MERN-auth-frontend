@@ -2,10 +2,16 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
 	const [data, setData] = useState({ email: "", password: "" });
 	const [error, setError] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+
+	const togglePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	}
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
@@ -45,7 +51,7 @@ const Login = () => {
 							className={styles.input}
 						/>
 						<input
-							type="password"
+							type={showPassword ? "text" : "password"}
 							placeholder="Password"
 							name="password"
 							onChange={handleChange}
@@ -53,6 +59,13 @@ const Login = () => {
 							required
 							className={styles.input}
 						/>
+						<button 
+						type="button" 
+						className={styles.eye_btn}
+						onClick={togglePasswordVisibility}
+						>{showPassword ? <FaEyeSlash/> : <FaEye/>}
+						</button>
+
 						{error && <div className={styles.error_msg}>{error}</div>}
 						<button type="submit" className={styles.green_btn}>
 							Sign In
