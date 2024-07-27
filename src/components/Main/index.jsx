@@ -1,14 +1,26 @@
 import styles from './styles.module.css';
-import React from 'react';
+import React, { useState } from 'react';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from "../Loader/Loader";
 
 const Main = () => {
+    const [loading, setLoading] = useState(false);
+
     const handleLogout = () => {
+        setLoading(true);
         localStorage.removeItem('token');
-        window.location.reload();
+        toast.success("Logout Successful");
+        setTimeout(() =>{
+            window.location.reload();
+        },1500);
+        setLoading(false);        
     };
 
     return (
         <div className={styles.main_container}>
+            <ToastContainer/>
+			{loading && <Loader/>}
             <nav className={styles.navbar}>
                 <h1>AuthShield</h1>
                 <button className={styles.white_btn} onClick={handleLogout}>

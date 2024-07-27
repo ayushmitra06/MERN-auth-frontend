@@ -3,6 +3,9 @@ import styles from './styles.module.css';
 import { Link , useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from "../Loader/Loader";
 
 const Signup = () => {
     const [data, setData] = useState({
@@ -15,6 +18,7 @@ const Signup = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 	const togglePasswordVisibility = () => {
 		setShowPassword(!showPassword);
@@ -25,21 +29,30 @@ const Signup = () => {
     } 
 
     const handleSubmit = async(e) => {
+        setLoading(true);
         e.preventDefault();
 
         try {
             const url = 'https://mern-auth-backend-1hqv.onrender.com/api/users';
             const {data : res} = await axios.post(url, data);
-            navigate('/login');
+            toast.success("Account Created Successfully");
+            setTimeout(() => {
+                navigate('/login');
+            },2000);
+            
             console.log(res.message);
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status <= 500){
                 setError(error.response.data.message);
+                toast.error(error.response.data.message);
             }
         }
+        setLoading(false);
     }
     return (
         <div className={styles.signup_container}>
+            <ToastContainer/>
+            {loading && <Loader/>}
             <div className={styles.signup_form_container}>
                 <div className={styles.left}>
                     <h1>Welcome Back</h1>
